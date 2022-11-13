@@ -13,6 +13,10 @@ public class Value {
         this.value = value;
     }
 
+    public int getValue() {
+        return value;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -25,8 +29,4 @@ public class Value {
         return value == value1.value;
     }
 
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(value);
-//    }
 }

@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class MyHashMap {
 
     LinkedList<Entry>[] hashmap = new LinkedList[10];
-    int size = 0;
+    private int size = 0;
 
     // so far there is no option to add a filled array into a hashmap.
     // only create one by inserting each element one by one.
@@ -121,8 +121,20 @@ public class MyHashMap {
      * copies hashmap into new array
      * by recalculating the hashcode of each element
      * and inserting them in their appropriate index.
+     * the oldHashMap served us as a temp, to insert the old hashmap into the new one.
+     * which overrides the old hashmap (inorder to use the put method).
      */
     private void resize() {
+        LinkedList<Entry>[] oldHashMap = hashmap;
+        hashmap = new LinkedList[size * 2];
+        size = 0;
+        for (LinkedList<Entry> entries : oldHashMap) {
+            if (entries != null) {
+                for (Entry e : entries) {
+                    put(e.key.getKey(), e.value.getValue());
+                }
+            }
+        }
 
     }
 
@@ -134,6 +146,17 @@ public class MyHashMap {
             if (entries != null) {
                 for (Entry e : entries) {
                     System.out.println("Key: " + e.key.getKey() + " Value: " + e.value.getValue());
+                }
+            }
+        }
+    }
+
+    public void printDetails() {
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                for (Entry e : entries) {
+                    System.out.println("Key: " + e.key.getKey() + " Value: " + e.value.getValue()
+                            + " index: " + getIndex(e.key));
                 }
             }
         }

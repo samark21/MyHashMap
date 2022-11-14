@@ -13,6 +13,10 @@ public class Key {
         this.key = key;
     }
 
+    public int getKey() {
+        return key;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {

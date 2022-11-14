@@ -21,6 +21,7 @@ public class MyHashMap {
      * check if array slot is empty then add the entry to the linkedlist,
      * otherwise check if there is a similar key, if yes, change value,
      * otherwise add a new node and insert the entry.
+     *
      * @param k int, easier for the user instead of inserting a new Key object each time.
      * @param v int, easier for the user instead of inserting a new Value object each time.
      */
@@ -55,7 +56,8 @@ public class MyHashMap {
     /**
      * this method returns the value of the desired key.
      * **Note - the return type can be changed to int and return will become
-     *          return e.value.getValue();
+     * return e.value.getValue();
+     *
      * @param key int, easier for the user instead of inserting a new Key object each time.
      * @return value object
      */
@@ -74,6 +76,7 @@ public class MyHashMap {
 
     /**
      * this method checks if the hashmap contains the desired key.
+     *
      * @param key int, easier for the user instead of inserting a new Key object each time.
      * @return true if key exists in hashmap, false if not.
      */
@@ -90,9 +93,24 @@ public class MyHashMap {
         return false;
     }
 
-
+    /**
+     * this method removes the desired entry from the hashmap.
+     *
+     * @param key int, easier for the user instead of inserting a new Key object each time.
+     */
     public void remove(int key) {
+        Key key1 = new Key(key);
 
+        int index = getIndex(key1);
+        if (containsKey(key)) {
+            for (Entry e : hashmap[index]) {
+                if (e.key.equals(key1)) {
+                    hashmap[index].remove(e);
+                    size--;
+                    break;
+                }
+            }
+        }
     }
 
     public int size() {
@@ -104,19 +122,29 @@ public class MyHashMap {
      * by recalculating the hashcode of each element
      * and inserting them in their appropriate index.
      */
-    public void resize() {
+    private void resize() {
 
     }
 
+    /**
+     * this method prints all the keys and their values that are in the hashmap.
+     */
     public void print() {
-
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                for (Entry e : entries) {
+                    System.out.println("Key: " + e.key.getKey() + " Value: " + e.value.getValue());
+                }
+            }
+        }
     }
 
-    public int getHash(Key key) {
+    // the following methods are to be changed into the implementation of the hashcode method in Key class.
+    private int getHash(Key key) {
         return key.hashCode();
     }
 
-    public int getIndex(Key key) {
+    private int getIndex(Key key) {
         return getHash(key) % hashmap.length;
     }
 

@@ -14,6 +14,8 @@ public class Main {
         hm.put(4, 7);
         hm.put(10, 2);
         hm.put(7, 24);
+        hm.put(15, 2);
+        hm.put(8, 24);
 
 
         System.out.println(hm.get(10).getValue());
@@ -22,10 +24,26 @@ public class Main {
         System.out.println(hm.get(4).getValue());
         System.out.println(hm.get(7).getValue());
 
+        System.out.println(hm.size());
+        System.out.println();
+
+        hm.remove(7);
+        hm.put(23,5);
+
         System.out.println(hm.containsKey(5));
-        System.out.println(hm.containsKey(6));
+        System.out.println(hm.containsKey(23));
 
         System.out.println(hm.size());
+        System.out.println();
+
+        hm.print();
+
+//        System.out.println(hm.get(10).getValue());
+//        System.out.println(hm.get(5).getValue());
+//        System.out.println(hm.get(3).getValue());
+//        System.out.println(hm.get(4).getValue());
+//        System.out.println(hm.get(23).getValue());
+
 
 
     }

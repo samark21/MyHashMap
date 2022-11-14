@@ -4,16 +4,38 @@ import java.util.LinkedList;
 
 public class MyHashMap {
 
-    LinkedList<Entry>[] hashmap = new LinkedList[10];
+//    final double DEFAULT_LOAD_FACTOR = 0.75;
+//    final int DEFAULT_INITIAL_SIZE = 10;
+//    final int DEFAULT_EXPANSION_RATE = 2;
+
+    LinkedList<Entry>[] hashmap;
     private int size = 0;
+    private double loadFactor = 0.75;
+    private int initialSize = 10;
+    private double expansionRate = 2;
+
+    public MyHashMap() {
+        this.hashmap = new LinkedList[initialSize];
+    }
+
+    public MyHashMap(double loadFactor) {
+        this.loadFactor = loadFactor;
+        this.hashmap = new LinkedList[initialSize];
+    }
+
+    public MyHashMap(int initialSize) {
+        this.hashmap = new LinkedList[initialSize];
+    }
+
+    public MyHashMap(double loadFactor, int initialSize, double expansionRate) {
+        this.loadFactor = loadFactor;
+        this.hashmap = new LinkedList[initialSize];
+        this.expansionRate = expansionRate;
+    }
 
     // so far there is no option to add a filled array into a hashmap.
     // only create one by inserting each element one by one.
     // otherwise, we would've looped over every item of the array and put it.
-
-    public MyHashMap() {
-
-    }
 
     /**
      * this function puts the entry in the LinkedList array.
@@ -25,31 +47,28 @@ public class MyHashMap {
      * @param k int, easier for the user instead of inserting a new Key object each time.
      * @param v int, easier for the user instead of inserting a new Value object each time.
      */
-    public void put(int k, int v) {
-        if (size >= hashmap.length) {
+    public void put(int k, Object v) {
+        if ((double) (size / hashmap.length) >= loadFactor) {
             resize();
         }
 
         Key key = new Key(k);
-        Value value = new Value(v);
-
         int index = getIndex(key);
 
         // if array slot is empty
         // fill it with a new LinkedList and populate it with the Entry
         if (hashmap[index] == null) {
             hashmap[index] = new LinkedList<>();
-        } else {
+        } else { // collision
             // check if key is already in the hashmap.
             for (Entry e : hashmap[index]) {
                 if (e.key.equals(key)) {
-                    e.value = value;
+                    e.value = v;
                     return;
                 }
             }
-
         }
-        hashmap[index].add(new Entry(key, value));
+        hashmap[index].add(new Entry(key, v));
         size++;
     }
 
@@ -61,7 +80,7 @@ public class MyHashMap {
      * @param key int, easier for the user instead of inserting a new Key object each time.
      * @return value object
      */
-    public Value get(int key) {
+    public Object get(int key) {
         Key key1 = new Key(key);
         int index = getIndex(key1);
         if (hashmap[index] != null) {
@@ -99,16 +118,17 @@ public class MyHashMap {
      * @param key int, easier for the user instead of inserting a new Key object each time.
      */
     public void remove(int key) {
-        Key key1 = new Key(key);
-
-        int index = getIndex(key1);
-        if (containsKey(key)) {
-            for (Entry e : hashmap[index]) {
-                if (e.key.equals(key1)) {
-                    hashmap[index].remove(e);
-                    size--;
-                    break;
-                }
+        Key k = new Key(key);
+        int index = getIndex(k);
+        if (hashmap[index] != null) {
+            Entry entry = hashmap[index]
+                    .stream()
+                    .filter(e -> e.key.equals(k))
+                    .findFirst()
+                    .orElse(null);
+            if (entry != null) {
+                hashmap[index].remove(entry);
+                size--;
             }
         }
     }
@@ -126,16 +146,20 @@ public class MyHashMap {
      */
     private void resize() {
         LinkedList<Entry>[] oldHashMap = hashmap;
-        hashmap = new LinkedList[size * 2];
+        hashmap = new LinkedList[calculateNewSize()];
         size = 0;
         for (LinkedList<Entry> entries : oldHashMap) {
             if (entries != null) {
                 for (Entry e : entries) {
-                    put(e.key.getKey(), e.value.getValue());
+                    put(e.key.getKey(), e.getValue());
                 }
             }
         }
 
+    }
+
+    private int calculateNewSize() {
+        return (int) (size * expansionRate);
     }
 
     /**
@@ -145,7 +169,7 @@ public class MyHashMap {
         for (LinkedList<Entry> entries : hashmap) {
             if (entries != null) {
                 for (Entry e : entries) {
-                    System.out.println("Key: " + e.key.getKey() + " Value: " + e.value.getValue());
+                    System.out.println("Key: " + e.key.getKey() + " Value: " + e.getValue());
                 }
             }
         }
@@ -155,7 +179,7 @@ public class MyHashMap {
         for (LinkedList<Entry> entries : hashmap) {
             if (entries != null) {
                 for (Entry e : entries) {
-                    System.out.println("Key: " + e.key.getKey() + " Value: " + e.value.getValue()
+                    System.out.println("Key: " + e.key.getKey() + " Value: " + e.getValue()
                             + " index: " + getIndex(e.key));
                 }
             }
@@ -169,6 +193,10 @@ public class MyHashMap {
 
     private int getIndex(Key key) {
         return getHash(key) % hashmap.length;
+    }
+
+    public double getLoadStatus() {
+        return ((double) size / hashmap.length);
     }
 
 

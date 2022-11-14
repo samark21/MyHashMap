@@ -1,9 +1,12 @@
 package src;
 
+import java.util.HashMap;
+
 public class Main {
 
 
     public static void main(String[] args) {
+
         MyHashMap hm = new MyHashMap();
         hm.put(10, 7);
         hm.put(5, 11);
@@ -14,13 +17,6 @@ public class Main {
         hm.put(15, 2);
         hm.put(8, 24);
 
-
-//        System.out.println(hm.get(10).getValue());
-//        System.out.println(hm.get(5).getValue());
-//        System.out.println(hm.get(3).getValue());
-//        System.out.println(hm.get(4).getValue());
-//        System.out.println(hm.get(7).getValue());
-//
         System.out.println("Size: " + hm.size());
         System.out.println();
         hm.printDetails();
@@ -34,6 +30,7 @@ public class Main {
         System.out.println("Normal print of keys and values: ");
         hm.print();
         System.out.println();
+        System.out.println("Load factor status " + hm.getLoadStatus());
 
         hm.put(14, 7);
         hm.put(11, 2);
@@ -46,5 +43,7 @@ public class Main {
         System.out.println();
         hm.printDetails();
 
+
+        System.out.println("Load factor status " + hm.getLoadStatus());
     }
 }

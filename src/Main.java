@@ -17,6 +17,13 @@ public class Main {
         hm.put(15, 2);
         hm.put(8, 24);
 
+        System.out.println("Empty slots: ");
+        System.out.println(hm.getEmptySlots());
+        System.out.println(hm.getEmptySlotsPercentage());
+
+        System.out.println();
+
+
         System.out.println("Size: " + hm.size());
         System.out.println();
         hm.printDetails();

@@ -4,26 +4,28 @@ import java.util.LinkedList;
 
 public class MyHashMap {
 
-//    final double DEFAULT_LOAD_FACTOR = 0.75;
-//    final int DEFAULT_INITIAL_SIZE = 10;
-//    final int DEFAULT_EXPANSION_RATE = 2;
+    final int DEFAULT_INITIAL_SIZE = 10;
 
     LinkedList<Entry>[] hashmap;
     private int size = 0;
     private double loadFactor = 0.75;
-    private int initialSize = 10;
     private double expansionRate = 2;
 
     public MyHashMap() {
-        this.hashmap = new LinkedList[initialSize];
+        this.hashmap = new LinkedList[DEFAULT_INITIAL_SIZE];
     }
 
     public MyHashMap(double loadFactor) {
         this.loadFactor = loadFactor;
-        this.hashmap = new LinkedList[initialSize];
+        this.hashmap = new LinkedList[DEFAULT_INITIAL_SIZE];
     }
 
     public MyHashMap(int initialSize) {
+        this.hashmap = new LinkedList[initialSize];
+    }
+
+    public MyHashMap(double loadFactor, int initialSize) {
+        this.loadFactor = loadFactor;
         this.hashmap = new LinkedList[initialSize];
     }
 
@@ -32,10 +34,6 @@ public class MyHashMap {
         this.hashmap = new LinkedList[initialSize];
         this.expansionRate = expansionRate;
     }
-
-    // so far there is no option to add a filled array into a hashmap.
-    // only create one by inserting each element one by one.
-    // otherwise, we would've looped over every item of the array and put it.
 
     /**
      * this function puts the entry in the LinkedList array.
@@ -100,11 +98,11 @@ public class MyHashMap {
      * @return true if key exists in hashmap, false if not.
      */
     public boolean containsKey(int key) {
-        Key key1 = new Key(key);
-        int index = getIndex(key1);
+        Key k = new Key(key);
+        int index = getIndex(k);
         if (hashmap[index] != null) {
             for (Entry e : hashmap[index]) {
-                if (e.key.equals(key1)) {
+                if (e.key.equals(k)) {
                     return true;
                 }
             }
@@ -133,6 +131,11 @@ public class MyHashMap {
         }
     }
 
+    /**
+     * this method returns the number of entries in the hashmap.
+     *
+     * @return number of entries.
+     */
     public int size() {
         return size;
     }
@@ -175,6 +178,9 @@ public class MyHashMap {
         }
     }
 
+    /**
+     * prints each entry of the hashmap including details of key, value and index in array.
+     */
     public void printDetails() {
         for (LinkedList<Entry> entries : hashmap) {
             if (entries != null) {
@@ -186,7 +192,6 @@ public class MyHashMap {
         }
     }
 
-    // the following methods are to be changed into the implementation of the hashcode method in Key class.
     private int getHash(Key key) {
         return key.hashCode();
     }
@@ -195,9 +200,36 @@ public class MyHashMap {
         return getHash(key) % hashmap.length;
     }
 
+    /* ------------------------------------------- USER FEEDBACK METHODS ------------------------------------------- */
+
+    /**
+     * @return load status at time of call.
+     */
     public double getLoadStatus() {
         return ((double) size / hashmap.length);
     }
 
+    /**
+     * empty slots are the slots in the array that have yet been filled with entries.
+     * in other words, their linked-list is still empty.
+     *
+     * @return number of empty slots remaining in the hashmap.
+     */
+    public int getEmptySlots() {
+        int counter = 0;
+        for (LinkedList<Entry> entry : hashmap) {
+            if (entry == null) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    /**
+     * @return percentage of empty slots out of total slots (size of hashmap).
+     */
+    public double getEmptySlotsPercentage() {
+        return 1 - ((double) getEmptySlots() / hashmap.length);
+    }
 
 }

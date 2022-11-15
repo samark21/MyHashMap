@@ -131,6 +131,33 @@ public class MyHashMap {
         }
     }
 
+    public void replace(int key, Object oldValue, Object newValue) {
+        Key k = new Key(key);
+        int index = getIndex(k);
+        if (hashmap[index] != null) {
+            for (Entry e : hashmap[index]) {
+                if (e.key.equals(k)) {
+                    if (oldValue.equals(e.getValue())) {
+                        e.value = newValue;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public void replace(int key, Object newValue){
+        Key k = new Key(key);
+        int index = getIndex(k);
+        if(hashmap[index] != null){
+            for(Entry e : hashmap[index]){
+                if(e.key.equals(k)){
+                    e.value = newValue;
+                }
+            }
+        }
+    }
+
     /**
      * this method returns the number of entries in the hashmap.
      *

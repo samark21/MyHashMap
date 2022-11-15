@@ -20,9 +20,17 @@ public class Main {
         System.out.println("Empty slots: ");
         System.out.println(hm.getEmptySlots());
         System.out.println(hm.getEmptySlotsPercentage());
-
         System.out.println();
 
+        System.out.println("replace(key, oldValue, newValue): ");
+        System.out.println("before: " + hm.get(7));
+        hm.replace(7, 24, 10);
+        System.out.println("after: " + hm.get(7));
+        System.out.println("replace(key, oldValue): ");
+        System.out.println("before: " + hm.get(7));
+        hm.replace(7, 24);
+        System.out.println("after: " + hm.get(7));
+        System.out.println();
 
         System.out.println("Size: " + hm.size());
         System.out.println();
@@ -31,8 +39,10 @@ public class Main {
 
         hm.remove(7);
 
+        System.out.println("Contains key: ");
         System.out.println(hm.containsKey(5));
-        System.out.println(hm.containsKey(23));
+        System.out.println(hm.containsKey(7));
+        System.out.println();
 
         System.out.println("Normal print of keys and values: ");
         hm.print();

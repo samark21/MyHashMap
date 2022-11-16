@@ -1,29 +1,33 @@
 package src;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 public class MyHashMap {
 
-//    final double DEFAULT_LOAD_FACTOR = 0.75;
-//    final int DEFAULT_INITIAL_SIZE = 10;
-//    final int DEFAULT_EXPANSION_RATE = 2;
+    final int DEFAULT_INITIAL_SIZE = 10;
 
     LinkedList<Entry>[] hashmap;
     private int size = 0;
     private double loadFactor = 0.75;
-    private int initialSize = 10;
     private double expansionRate = 2;
 
     public MyHashMap() {
-        this.hashmap = new LinkedList[initialSize];
+        this.hashmap = new LinkedList[DEFAULT_INITIAL_SIZE];
     }
 
     public MyHashMap(double loadFactor) {
         this.loadFactor = loadFactor;
-        this.hashmap = new LinkedList[initialSize];
+        this.hashmap = new LinkedList[DEFAULT_INITIAL_SIZE];
     }
 
     public MyHashMap(int initialSize) {
+        this.hashmap = new LinkedList[initialSize];
+    }
+
+    public MyHashMap(double loadFactor, int initialSize) {
+        this.loadFactor = loadFactor;
         this.hashmap = new LinkedList[initialSize];
     }
 
@@ -32,10 +36,6 @@ public class MyHashMap {
         this.hashmap = new LinkedList[initialSize];
         this.expansionRate = expansionRate;
     }
-
-    // so far there is no option to add a filled array into a hashmap.
-    // only create one by inserting each element one by one.
-    // otherwise, we would've looped over every item of the array and put it.
 
     /**
      * this function puts the entry in the LinkedList array.
@@ -73,6 +73,19 @@ public class MyHashMap {
     }
 
     /**
+     * this method puts a new entry in the hashmap only if given key doesn't already exist in it.
+     *
+     * @param k int key.
+     * @param v object value.
+     */
+    public void putIfAbsent(int k, Object v) {
+        Entry entry = getEntry(k);
+        if (entry == null) {
+            put(k, v);
+        }
+    }
+
+    /**
      * this method returns the value of the desired key.
      * **Note - the return type can be changed to int and return will become
      * return e.value.getValue();
@@ -81,14 +94,9 @@ public class MyHashMap {
      * @return value object
      */
     public Object get(int key) {
-        Key key1 = new Key(key);
-        int index = getIndex(key1);
-        if (hashmap[index] != null) {
-            for (Entry e : hashmap[index]) {
-                if (e.key.equals(key1)) {
-                    return e.value;
-                }
-            }
+        Entry entry = getEntry(key);
+        if (entry != null) {
+            return entry.value;
         }
         return null;
     }
@@ -100,16 +108,65 @@ public class MyHashMap {
      * @return true if key exists in hashmap, false if not.
      */
     public boolean containsKey(int key) {
-        Key key1 = new Key(key);
-        int index = getIndex(key1);
-        if (hashmap[index] != null) {
-            for (Entry e : hashmap[index]) {
-                if (e.key.equals(key1)) {
-                    return true;
+        Entry entry = getEntry(key);
+        if (entry != null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * this method checks if there's at least one occurence of specified value.
+     *
+     * @param value specified value to be checked.
+     * @return boolean, true if it exists in the hashmap, false if not.
+     */
+    public boolean containsValue(Object value) {
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                for (Entry e : entries) {
+                    if (e.value.equals(value)) {
+                        return true;
+                    }
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * this method returns a HashSet of all the entries' keys.
+     * by looping and going through all the entries, the keys were added to a HashSet
+     *
+     * @return HashSet of all the keys in the hashmap.
+     */
+    public HashSet<Integer> keySet() {
+        HashSet<Integer> keySet = new HashSet<Integer>();
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                for (Entry e : entries) {
+                    keySet.add(e.key.getKey());
+                }
+            }
+        }
+        return keySet;
+    }
+
+    /**
+     * this method returns a HashSet of all existing values in the hashmap.
+     *
+     * @return HashSet of all the values.
+     */
+    public HashSet<Object> values() {
+        HashSet<Object> valueSet = new HashSet<Object>();
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                for (Entry e : entries) {
+                    valueSet.add(e.getValue());
+                }
+            }
+        }
+        return valueSet;
     }
 
     /**
@@ -133,6 +190,64 @@ public class MyHashMap {
         }
     }
 
+    /**
+     * this method clears all the entries and deletes the LinkedLists from the hashmap.
+     */
+    public void clear() {
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                entries.clear();
+                entries = null;
+            }
+        }
+        size = 0;
+    }
+
+    /**
+     * this method replaces a key's value with newValue if it exists in the hashmap.
+     * it checks if there is an entry that contains key and oldValue,
+     * and replaces oldValue with newValue.
+     *
+     * @param key      int, specified key.
+     * @param oldValue current value.
+     * @param newValue new value.
+     */
+    public void replace(int key, Object oldValue, Object newValue) {
+        Entry entry = getEntry(key);
+        if (entry != null) {
+            if (oldValue.equals(entry.getValue())) {
+                entry.value = newValue;
+            }
+        }
+    }
+
+    /**
+     * this method replaces a key's value with newValue if it exists in the hashmap.
+     *
+     * @param key      int, specified key.
+     * @param newValue new value.
+     */
+    public void replace(int key, Object newValue) {
+        Entry entry = getEntry(key);
+        if (entry != null) {
+            entry.value = newValue;
+        }
+    }
+
+    /**
+     * this method checks if the hashmap is empty.
+     *
+     * @return true if hashmap is empty, false otherwise.
+     */
+    public boolean isEmpty() {
+        return (size == 0);
+    }
+
+    /**
+     * this method returns the number of entries in the hashmap.
+     *
+     * @return number of entries.
+     */
     public int size() {
         return size;
     }
@@ -155,11 +270,69 @@ public class MyHashMap {
                 }
             }
         }
-
     }
 
     private int calculateNewSize() {
         return (int) (size * expansionRate);
+    }
+
+    private int getHash(Key key) {
+        return key.hashCode();
+    }
+
+    private int getIndex(Key key) {
+        return getHash(key) % hashmap.length;
+    }
+
+    /**
+     * this method checks if there is suck entry with given key.
+     *
+     * @param key
+     * @return entry - if exists. null otherwise.
+     */
+    private Entry getEntry(int key) {
+        Key k = new Key(key);
+        int index = getIndex(k);
+        if (hashmap[index] != null) {
+            for (Entry e : hashmap[index]) {
+                if (e.key.equals(k)) {
+                    return e;
+                }
+            }
+        }
+        return null;
+    }
+
+    /* ------------------------------------------- USER FEEDBACK METHODS ------------------------------------------- */
+
+    /**
+     * @return load status at time of call.
+     */
+    public double getLoadStatus() {
+        return ((double) size / hashmap.length);
+    }
+
+    /**
+     * empty slots are the slots in the array that have yet been filled with entries.
+     * in other words, their linked-list is still empty.
+     *
+     * @return number of empty slots remaining in the hashmap.
+     */
+    public int getEmptySlots() {
+        int counter = 0;
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries == null) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    /**
+     * @return percentage of empty slots out of total slots (size of hashmap).
+     */
+    public double getEmptySlotsPercentage() {
+        return 1 - ((double) getEmptySlots() / hashmap.length);
     }
 
     /**
@@ -175,6 +348,9 @@ public class MyHashMap {
         }
     }
 
+    /**
+     * prints each entry of the hashmap including details of key, value and index in array.
+     */
     public void printDetails() {
         for (LinkedList<Entry> entries : hashmap) {
             if (entries != null) {
@@ -185,19 +361,4 @@ public class MyHashMap {
             }
         }
     }
-
-    // the following methods are to be changed into the implementation of the hashcode method in Key class.
-    private int getHash(Key key) {
-        return key.hashCode();
-    }
-
-    private int getIndex(Key key) {
-        return getHash(key) % hashmap.length;
-    }
-
-    public double getLoadStatus() {
-        return ((double) size / hashmap.length);
-    }
-
-
 }

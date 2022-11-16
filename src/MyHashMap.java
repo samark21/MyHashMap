@@ -144,14 +144,22 @@ public class MyHashMap {
         }
     }
 
-
+    public void clear() {
+        for (LinkedList<Entry> entry : hashmap) {
+            if (entry != null) {
+                entry.clear();
+                entry = null;
+            }
+        }
+        size = 0;
+    }
 
     /**
      * this method replaces a key's value with newValue if it exists in the hashmap.
      * it checks if there is an entry that contains key and oldValue,
      * and replaces oldValue with newValue.
      *
-     * @param key int, specified key.
+     * @param key      int, specified key.
      * @param oldValue current value.
      * @param newValue new value.
      */
@@ -167,7 +175,7 @@ public class MyHashMap {
     /**
      * this method replaces a key's value with newValue if it exists in the hashmap.
      *
-     * @param key int, specified key.
+     * @param key      int, specified key.
      * @param newValue new value.
      */
     public void replace(int key, Object newValue) {
@@ -179,9 +187,10 @@ public class MyHashMap {
 
     /**
      * this method checks if the hashmap is empty.
+     *
      * @return true if hashmap is empty, false otherwise.
      */
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return (size == 0);
     }
 
@@ -212,38 +221,10 @@ public class MyHashMap {
                 }
             }
         }
-
     }
 
     private int calculateNewSize() {
         return (int) (size * expansionRate);
-    }
-
-    /**
-     * this method prints all the keys and their values that are in the hashmap.
-     */
-    public void print() {
-        for (LinkedList<Entry> entries : hashmap) {
-            if (entries != null) {
-                for (Entry e : entries) {
-                    System.out.println("Key: " + e.key.getKey() + " Value: " + e.getValue());
-                }
-            }
-        }
-    }
-
-    /**
-     * prints each entry of the hashmap including details of key, value and index in array.
-     */
-    public void printDetails() {
-        for (LinkedList<Entry> entries : hashmap) {
-            if (entries != null) {
-                for (Entry e : entries) {
-                    System.out.println("Key: " + e.key.getKey() + " Value: " + e.getValue()
-                            + " index: " + getIndex(e.key));
-                }
-            }
-        }
     }
 
     private int getHash(Key key) {
@@ -256,6 +237,7 @@ public class MyHashMap {
 
     /**
      * this method checks if there is suck entry with given key.
+     *
      * @param key
      * @return entry - if exists. null otherwise.
      */
@@ -304,4 +286,30 @@ public class MyHashMap {
         return 1 - ((double) getEmptySlots() / hashmap.length);
     }
 
+    /**
+     * this method prints all the keys and their values that are in the hashmap.
+     */
+    public void print() {
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                for (Entry e : entries) {
+                    System.out.println("Key: " + e.key.getKey() + " Value: " + e.getValue());
+                }
+            }
+        }
+    }
+
+    /**
+     * prints each entry of the hashmap including details of key, value and index in array.
+     */
+    public void printDetails() {
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                for (Entry e : entries) {
+                    System.out.println("Key: " + e.key.getKey() + " Value: " + e.getValue()
+                            + " index: " + getIndex(e.key));
+                }
+            }
+        }
+    }
 }

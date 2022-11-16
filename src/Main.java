@@ -70,7 +70,15 @@ public class Main {
 
         MyHashMap hm2 = new MyHashMap();
         System.out.println("hm2 isEmpty? " + hm2.isEmpty());
+        hm2.put(4,5);
+        hm2.remove(4);
+        System.out.println("hm2 isEmpty? " + hm2.isEmpty());
 
+
+        hm.clear();
+        System.out.println("hm content: ");
+        hm.print();
+        System.out.println("hm isEmpty? " + hm.isEmpty());
 
     }
 }

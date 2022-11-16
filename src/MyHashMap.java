@@ -1,6 +1,8 @@
 package src;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 public class MyHashMap {
 
@@ -92,14 +94,9 @@ public class MyHashMap {
      * @return value object
      */
     public Object get(int key) {
-        Key key1 = new Key(key);
-        int index = getIndex(key1);
-        if (hashmap[index] != null) {
-            for (Entry e : hashmap[index]) {
-                if (e.key.equals(key1)) {
-                    return e.value;
-                }
-            }
+        Entry entry = getEntry(key);
+        if (entry != null) {
+            return entry.value;
         }
         return null;
     }
@@ -111,16 +108,42 @@ public class MyHashMap {
      * @return true if key exists in hashmap, false if not.
      */
     public boolean containsKey(int key) {
-        Key k = new Key(key);
-        int index = getIndex(k);
-        if (hashmap[index] != null) {
-            for (Entry e : hashmap[index]) {
-                if (e.key.equals(k)) {
-                    return true;
+        Entry entry = getEntry(key);
+        if (entry != null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * this method checks if there's at least one occurence of specified value.
+     *
+     * @param value specified value to be checked.
+     * @return boolean, true if it exists in the hashmap, false if not.
+     */
+    public boolean containsValue(Object value) {
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                for (Entry e : entries) {
+                    if (e.value.equals(value)) {
+                        return true;
+                    }
                 }
             }
         }
         return false;
+    }
+
+    public HashSet<Integer> keySet() {
+        HashSet<Integer> keySet = new HashSet<Integer>();
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                for (Entry e : entries) {
+                    keySet.add(e.key.getKey());
+                }
+            }
+        }
+        return keySet;
     }
 
     /**
@@ -144,11 +167,14 @@ public class MyHashMap {
         }
     }
 
+    /**
+     * this method clears all the entries and deletes the LinkedLists from the hashmap.
+     */
     public void clear() {
-        for (LinkedList<Entry> entry : hashmap) {
-            if (entry != null) {
-                entry.clear();
-                entry = null;
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries != null) {
+                entries.clear();
+                entries = null;
             }
         }
         size = 0;
@@ -271,8 +297,8 @@ public class MyHashMap {
      */
     public int getEmptySlots() {
         int counter = 0;
-        for (LinkedList<Entry> entry : hashmap) {
-            if (entry == null) {
+        for (LinkedList<Entry> entries : hashmap) {
+            if (entries == null) {
                 counter++;
             }
         }

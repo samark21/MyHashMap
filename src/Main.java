@@ -20,6 +20,9 @@ public class Main {
         hm.putIfAbsent(10,156486451);
         hm.putIfAbsent(1,1);
 
+        System.out.println(hm.containsValue(5));
+
+        System.out.println(hm.keySet());
 
         System.out.println("Empty slots: ");
         System.out.println(hm.getEmptySlots());

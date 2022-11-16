@@ -134,6 +134,11 @@ public class MyHashMap {
         return false;
     }
 
+    /**
+     * this method returns a HashSet of all the entries' keys.
+     * by looping and going through all the entries, the keys were added to a HashSet
+     * @return HashSet of all the keys in the hashmap.
+     */
     public HashSet<Integer> keySet() {
         HashSet<Integer> keySet = new HashSet<Integer>();
         for (LinkedList<Entry> entries : hashmap) {

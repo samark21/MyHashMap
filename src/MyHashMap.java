@@ -71,6 +71,19 @@ public class MyHashMap {
     }
 
     /**
+     * this method puts a new entry in the hashmap only if given key doesn't already exist in it.
+     *
+     * @param k int key.
+     * @param v object value.
+     */
+    public void putIfAbsent(int k, Object v) {
+        Entry entry = getEntry(k);
+        if (entry == null) {
+            put(k, v);
+        }
+    }
+
+    /**
      * this method returns the value of the desired key.
      * **Note - the return type can be changed to int and return will become
      * return e.value.getValue();
@@ -131,31 +144,45 @@ public class MyHashMap {
         }
     }
 
+    /**
+     * this method replaces a key's value with newValue if it exists in the hashmap.
+     * it checks if there is an entry that contains key and oldValue,
+     * and replaces oldValue with newValue.
+     *
+     * @param key int, specified key.
+     * @param oldValue current value.
+     * @param newValue new value.
+     */
     public void replace(int key, Object oldValue, Object newValue) {
-        Key k = new Key(key);
-        int index = getIndex(k);
-        if (hashmap[index] != null) {
-            for (Entry e : hashmap[index]) {
-                if (e.key.equals(k)) {
-                    if (oldValue.equals(e.getValue())) {
-                        e.value = newValue;
-                        return;
-                    }
-                }
+        Entry entry = getEntry(key);
+        if (entry != null) {
+            if (oldValue.equals(entry.getValue())) {
+                entry.value = newValue;
             }
         }
     }
 
-    public void replace(int key, Object newValue){
-        Key k = new Key(key);
-        int index = getIndex(k);
-        if(hashmap[index] != null){
-            for(Entry e : hashmap[index]){
-                if(e.key.equals(k)){
-                    e.value = newValue;
-                }
+    /**
+     * this method replaces a key's value with newValue if it exists in the hashmap.
+     *
+     * @param key int, specified key.
+     * @param newValue new value.
+     */
+    public void replace(int key, Object newValue) {
+        Entry entry = getEntry(key);
+        if (entry != null) {
+            entry.value = newValue;
+        }
+    }
+
+    public boolean isEmpty(){
+        for(LinkedList<Entry> entry : hashmap){
+            if(entry != null){
+                return false;
             }
         }
+
+        return true;
     }
 
     /**
@@ -225,6 +252,24 @@ public class MyHashMap {
 
     private int getIndex(Key key) {
         return getHash(key) % hashmap.length;
+    }
+
+    /**
+     * this method checks if there is suck entry with given key.
+     * @param key
+     * @return entry - if exists. null otherwise.
+     */
+    private Entry getEntry(int key) {
+        Key k = new Key(key);
+        int index = getIndex(k);
+        if (hashmap[index] != null) {
+            for (Entry e : hashmap[index]) {
+                if (e.key.equals(k)) {
+                    return e;
+                }
+            }
+        }
+        return null;
     }
 
     /* ------------------------------------------- USER FEEDBACK METHODS ------------------------------------------- */

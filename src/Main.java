@@ -17,6 +17,10 @@ public class Main {
         hm.put(15, 2);
         hm.put(8, 24);
 
+        hm.putIfAbsent(10,156486451);
+        hm.putIfAbsent(1,1);
+
+
         System.out.println("Empty slots: ");
         System.out.println(hm.getEmptySlots());
         System.out.println(hm.getEmptySlotsPercentage());
@@ -60,7 +64,13 @@ public class Main {
         System.out.println();
         hm.printDetails();
 
-
         System.out.println("Load factor status " + hm.getLoadStatus());
+
+        System.out.println("hm isEmpty? " + hm.isEmpty());
+
+        MyHashMap hm2 = new MyHashMap();
+        System.out.println("hm2 isEmpty? " + hm2.isEmpty());
+
+
     }
 }

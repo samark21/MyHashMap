@@ -144,6 +144,8 @@ public class MyHashMap {
         }
     }
 
+
+
     /**
      * this method replaces a key's value with newValue if it exists in the hashmap.
      * it checks if there is an entry that contains key and oldValue,
@@ -175,14 +177,12 @@ public class MyHashMap {
         }
     }
 
+    /**
+     * this method checks if the hashmap is empty.
+     * @return true if hashmap is empty, false otherwise.
+     */
     public boolean isEmpty(){
-        for(LinkedList<Entry> entry : hashmap){
-            if(entry != null){
-                return false;
-            }
-        }
-
-        return true;
+        return (size == 0);
     }
 
     /**
